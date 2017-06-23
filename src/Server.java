@@ -1,6 +1,5 @@
-import socket.ServerSocketHelper;
+import socket.TcpServerHelper;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
@@ -8,6 +7,6 @@ import java.net.UnknownHostException;
  */
 public class Server {
     public static void main(String[] args) throws UnknownHostException {
-        new ServerSocketHelper();
+        new TcpServerHelper();
     }
 }

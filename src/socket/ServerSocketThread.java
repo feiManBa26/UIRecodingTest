@@ -1,5 +1,7 @@
 package socket;
 
+import utils.IOUtils;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -23,18 +25,38 @@ public class ServerSocketThread extends Thread {
         try {
             //获取输出流，响应客户端的请求
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            dataOutputStream.writeUTF("草泥马socket");
+            String serverPush = "你说你说socket";
+            String length = serverPush.length() + "";
+            byte[] intToBytes = length.getBytes("UTF-8");
+            byte[] serverPushBytes = serverPush.getBytes("UTF-8");
+            dataOutputStream.write(intToBytes);
+            dataOutputStream.write(serverPushBytes);
             dataOutputStream.flush();
             socket.shutdownOutput();
 
             //获取输入流，并读取客户端信息
             dataInputStream = new DataInputStream(socket.getInputStream());
-            String info = null;
-            info = dataInputStream.readUTF();
-            System.out.println("我是服务器，客户端说：" + info);
-            socket.shutdownInput();//关闭输入流
-
-
+            /**
+             * 读取客户端信息：
+             * 1.读取客户端信息类型 0--文件类型 1--字符串 2--投屏信息
+             */
+            byte[] bytes = new byte[4];
+            dataInputStream.read(bytes);
+            int bytesToInt = IOUtils.bytesToInt(bytes, 0);
+            switch (bytesToInt) {
+                case 0:
+                    break;
+                case 1: //string字符流
+                    String info = null;
+                    byte[] bytes1 = new byte[bytesToInt];
+                    dataInputStream.read(bytes1);
+                    info = new String(bytes1);
+                    System.out.print(info);
+                    break;
+                case 2:
+                    break;
+            }
+            socket.shutdownInput();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -54,4 +76,6 @@ public class ServerSocketThread extends Thread {
             }
         }
     }
+
+
 }
