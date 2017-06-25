@@ -1,7 +1,3 @@
-package socket;
-
-import utils.IOUtils;
-
 import java.io.*;
 import java.net.Socket;
 
@@ -33,25 +29,40 @@ public class ServerSocketThread extends Thread {
             dataOutputStream.write(serverPushBytes);
             dataOutputStream.flush();
             socket.shutdownOutput();
-
             //获取输入流，并读取客户端信息
             dataInputStream = new DataInputStream(socket.getInputStream());
             /**
              * 读取客户端信息：
              * 1.读取客户端信息类型 0--文件类型 1--字符串 2--投屏信息
              */
-            byte[] bytes = new byte[4];
-            dataInputStream.read(bytes);
-            int bytesToInt = IOUtils.bytesToInt(bytes, 0);
-            switch (bytesToInt) {
-                case 0:
+
+            int toInt = dataInputStream.readInt();
+            switch (toInt) {
+                case 0: //文件流
+                    //获取文件名称
+                    String fileName = dataInputStream.readUTF();
+                    System.out.println(fileName);
+                    //获取文件长度
+                    long readLong = dataInputStream.readLong();
+                    System.out.println(readLong);
+                    //获取文件输入流
+                    File file = new File("D:/input/" + fileName);
+                    if(file.exists()){
+                        file.delete();
+                    }else{
+                        file.createNewFile();
+                    }
+
+                    FileOutputStream   fos = new FileOutputStream(file);
+                    // 开始接收文件
+                    byte[] bytes = new byte[1024];
+                    int num = 0;
+                    while((num = dataInputStream.read(bytes, 0, bytes.length)) != -1) {
+                        fos.write(bytes, 0, num);
+                        fos.flush();
+                    }
                     break;
                 case 1: //string字符流
-                    String info = null;
-                    byte[] bytes1 = new byte[bytesToInt];
-                    dataInputStream.read(bytes1);
-                    info = new String(bytes1);
-                    System.out.print(info);
                     break;
                 case 2:
                     break;

@@ -1,4 +1,4 @@
-package socket;
+package client;
 
 /**
  * socket 连接状态

@@ -1,5 +1,7 @@
-package socket;
+package client;
 
+
+import java.io.IOException;
 
 /**
  * File: LClient.java
@@ -28,9 +30,15 @@ public interface LClient {
      */
     boolean isConnected();
 
-    void send(byte[] bytes, ISendCallBack callback);
-
+    void send(byte[] bytes, ISendCallBack callback) throws IOException;
     void send(String strData);
+
+    /**
+     * 上传文件方法
+     * @param fileName
+     */
+    void sendFile(String fileName) throws IOException;
+
     /**
      * @return 返回socket连接状态
      */

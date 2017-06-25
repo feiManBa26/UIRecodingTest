@@ -1,10 +1,7 @@
-package socket;
-
-import utils.IOUtils;
+package client;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * Created by ejiang on 2017-06-16.
@@ -31,7 +28,7 @@ public class TcpClient implements LClient {
                 connectNum++;
                 //1.创建客户端Socket，指定服务器地址和端口
                 socket = null;
-                socket = new Socket("192.168.0.73", 8888);
+                socket = new Socket(ip,port);
                 if (socket.isConnected()) {
                     //获取输出流
                     dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -102,13 +99,56 @@ public class TcpClient implements LClient {
     }
 
     @Override
-    public void send(byte[] bytes, ISendCallBack callback) {
-
+    public void send(byte[] bytes, ISendCallBack callback) throws IOException {
+        if(socket!=null){
+            synchronized (TcpClient.class){
+                if(isConnected()){
+                    dataOutputStream.write(bytes);
+                    dataOutputStream.flush();
+                }
+            }
+        }
     }
 
     @Override
     public void send(String strData) {
 
+    }
+
+    @Override
+    public void sendFile(String fileName) throws IOException {
+        if(socket!=null){
+            synchronized (TcpClient.class){
+                if(isConnected()){
+                    File file = new File(fileName);
+                    if(file.exists()){
+                        //上传文件类型标识
+                        dataOutputStream.writeInt(0);
+                        dataOutputStream.flush();
+                        //上传文件名称
+                        dataOutputStream.writeUTF(file.getName());
+                        dataOutputStream.flush();
+                        //上传文件的长度
+                        dataOutputStream.writeLong(file.length());
+                        dataOutputStream.flush();
+                        //上传文件数据流
+                        byte[] bytes = new byte[1024];
+                        int length = 0;
+                        long progress = 0;
+                        FileInputStream fileInputStream = new FileInputStream(file);
+                        while ((length = fileInputStream.read(bytes,0,bytes.length))!=-1){
+                            dataOutputStream.write(bytes,0,length);
+                            dataOutputStream.flush();
+                            progress += length;
+                            System.out.println("| " + (100*progress/file.length()) + "% |");
+                        }
+                    }else{
+                        return;
+                    }
+
+                }
+            }
+        }
     }
 
     @Override

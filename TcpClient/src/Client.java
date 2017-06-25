@@ -1,11 +1,6 @@
-import socket.LClient;
-import socket.SocketIOCallback;
-import socket.TcpClient;
-import socket.init.InitTcpClient;
+import client.InitTcpClient;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * Created by ejiang on 2017-06-16.

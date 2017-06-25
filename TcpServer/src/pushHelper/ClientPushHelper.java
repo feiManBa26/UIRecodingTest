@@ -1,4 +1,4 @@
-package socket.pushHelper;
+package pushHelper;
 
 /**
  * Created by ejiang on 2017-06-23.
@@ -6,4 +6,6 @@ package socket.pushHelper;
  * 推送文件类型：1.字符串2.文件(照片视频)
  */
 public class ClientPushHelper {
+
+
 }

@@ -1,6 +1,4 @@
-package socket;
-
-import java.io.*;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,17 +15,16 @@ public class TcpServerHelper {
         try {
 
             ServerSocket serverSocket = null;
-            serverSocket = new ServerSocket(8888);
+            serverSocket = new ServerSocket(6033);
             if(serverSocket==null){
                 return;
             }
-
-            Socket socket = null;
             //记录客户端的数量
             int count = 0;
             System.err.println("***服务器即将启动，等待客户端的连接***");
             //循环监听等待客户端的连接
             while (true) {
+                Socket socket = null;
                 //调用accept()方法开始监听，等待客户端的连接
                 socket = serverSocket.accept();
                 //创建一个新的线程

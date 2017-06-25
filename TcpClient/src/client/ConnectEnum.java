@@ -1,4 +1,4 @@
-package socket;
+package client;
 
 /**
  * Created by ejiang on 2017-06-23.
