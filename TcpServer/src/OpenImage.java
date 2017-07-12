@@ -1,5 +1,6 @@
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,17 +24,28 @@ public class OpenImage {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JFrame frame = new ImageViewerFrame();
+                JFrame frame = new ImageviewOpenFrame();
                 Toolkit toolkit = Toolkit.getDefaultToolkit();
                 Dimension size = toolkit.getScreenSize();
                 int width = size.width / 4;
                 int height = size.height / 4;
-                frame.setSize(width * 2, height * 2);
                 frame.setLocation(width, height);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
             }
         });
+    }
+
+    static class ImageviewOpenFrame extends JFrame {
+        public ImageviewOpenFrame() throws HeadlessException {
+            setTitle("显示client传递的照片");
+            JLabel label = new JLabel();
+            add(label);
+            ImageIcon icon = new ImageIcon("D:\\Ming_Project\\xiaoPush\\GrowingCastScreen\\app\\src\\main\\res\\drawable-xxhdpi\\castscreen.png");
+            label.setIcon(icon);
+            setSize(icon.getIconWidth(), icon.getIconHeight());
+
+        }
     }
 
 
