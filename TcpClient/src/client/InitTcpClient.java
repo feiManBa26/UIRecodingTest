@@ -8,17 +8,18 @@ import java.io.UnsupportedEncodingException;
  * Created by ejiang on 2017-06-23.
  */
 public class InitTcpClient implements SocketIOCallback {
-    private String lcoalIp = "192.168.253.2";
-    private int prot = 6033;
+    private String lcoalIp = "192.168.0.73";
+    private int prot = 8888;
 
     public InitTcpClient() {
         LClient lClient = new TcpClient(this);
         lClient.connect(lcoalIp, prot); //初始化连接
-        try {
-            lClient.sendFile("L:\\001\\Baptiste Giabiconi\\New York - Baptiste Giabiconi.mp3");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //传输文件
+//        try {
+//            lClient.sendFile("L:\\001\\Baptiste Giabiconi\\New York - Baptiste Giabiconi.mp3");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

@@ -62,11 +62,7 @@ public class TcpClient implements LClient {
             synchronized (TcpClient.class) {
                 if (isConnected()) {
                     try {
-                        byte[] bytes = new byte[1];
-                        dataInputStream.read(bytes);
-                        byte[] bytes1 = new byte[Integer.parseInt(new String(bytes))];
-                        dataInputStream.read(bytes1);
-                        String serverPush = new String(bytes1);
+                        String serverPush =  dataInputStream.readUTF();
                         System.out.print(serverPush);
                         socketIOCallback.onReceive(serverPush);
                     } catch (IOException e) {

@@ -15,7 +15,7 @@ public class TcpServerHelper {
         try {
 
             ServerSocket serverSocket = null;
-            serverSocket = new ServerSocket(6033);
+            serverSocket = new ServerSocket(8888);
             if(serverSocket==null){
                 return;
             }
