@@ -1,3 +1,5 @@
+package type;
+
 /**
  * Created by ejiang on 2017-06-23.
  */
