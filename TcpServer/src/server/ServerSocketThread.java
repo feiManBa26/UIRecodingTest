@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import method.User;
+import utils.IOUtils;
 import utils.OpenImageUtils;
 
 /**
@@ -84,6 +85,19 @@ public class ServerSocketThread extends Thread {
                         break;
                     case 3:
                         remove(mUser);
+                        break;
+                    case 4:
+                        byte[] bytes2 = new byte[4];
+                        mUser.getDataInputStream().read(bytes2);
+                        int leght = IOUtils.bytesToInt(bytes2, 0);
+                        int total = 0;
+                        byte[] bytes3 = new byte[leght];
+                        StringBuffer buffer = new StringBuffer();
+                        while (leght > 0 && ((total = mUser.getDataInputStream().read(bytes3, 0, bytes3.length)) != -1)) {
+                            buffer.append(new String(bytes3, 0, total));
+                            leght -= total;
+                        }
+                        System.out.println(buffer.toString());
                         break;
                     default:
                         break;
