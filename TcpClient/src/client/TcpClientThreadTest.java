@@ -6,8 +6,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -52,7 +50,7 @@ public class TcpClientThreadTest implements LocalClient {
                 String json = gson.toJson(transferFile);
                 try {
                     TransferMessage message = new TransferMessage();
-                    message.setMessageTypes(TransferMessage.MessageTypes.SendFile);
+                    message.setMessageType(TransferMessage.MessageTypes.SendFile);
                     message.setMessageContent(json);
                     String json1 = gson.toJson(message);
                     byte[] jsonBytes = json1.getBytes("UTF-8");
@@ -133,6 +131,9 @@ public class TcpClientThreadTest implements LocalClient {
                         byte[] bytes = new byte[1024];
                         long progress = 0;
                         while ((length = inputStream.read(bytes, 0, bytes.length)) != -1) {
+                            byte[] intToBytes = IOUtils.intToBytes(length);
+                            mDataOutputStream.write(intToBytes);
+                            mDataOutputStream.flush();
                             mDataOutputStream.write(bytes, 0, length);
                             mDataOutputStream.flush();
                             progress += length;
@@ -142,6 +143,53 @@ public class TcpClientThreadTest implements LocalClient {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void sendFileByteList(String filePath, SendCallback callback) {
+        if (filePath == null && filePath.isEmpty()) return;
+        synchronized (TcpClientThreadTest.class) {
+            if (isConnection()) {
+                Gson gson = new Gson();
+                String json = gson.toJson(getTranferFile(filePath));
+                try {
+                    TransferMessage message = new TransferMessage();
+                    message.setMessageType(TransferMessage.MessageTypes.SendFile);
+                    message.setMessageContent(json);
+                    String json1 = gson.toJson(message);
+                    byte[] jsonBytes = json1.getBytes("UTF-8");
+                    int length = jsonBytes.length;
+                    byte[] intToBytes = IOUtils.intToBytes(length);
+                    mDataOutputStream.write(intToBytes);
+                    mDataOutputStream.flush();
+                    mDataOutputStream.write(jsonBytes);
+                    mDataOutputStream.flush();
+                    callback.sendSuccess();
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        InputStream inputStream = new FileInputStream(file);
+                        if (inputStream == null) return;
+                        int available = inputStream.available();
+                        int FileLength = 0;
+                        byte[] bytes = new byte[1024];
+                        long progress = 0;
+                        while ((FileLength = inputStream.read(bytes, 0, bytes.length)) != -1) {
+                            byte[] fileIntToBytes = IOUtils.intToBytes(FileLength);
+                            mDataOutputStream.write(fileIntToBytes);
+                            mDataOutputStream.flush();
+                            mDataOutputStream.write(bytes, 0, FileLength);
+                            mDataOutputStream.flush();
+                            progress += FileLength;
+                            System.out.println("| " + (100 * progress / available) + "% |");
+                        }
+                        inputStream.close();
+                    }
+                    callback.sendSuccess();
+                } catch (IOException e) {
+                    callback.sendError(e);
                 }
             }
         }
@@ -173,4 +221,43 @@ public class TcpClientThreadTest implements LocalClient {
             mDataInputStream.close();
     }
 
+
+    private TransferFile getTranferFile(String filePath) {
+
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            TransferFile transferFile = new TransferFile();
+            String name = file.getName();
+            transferFile.setFileName(name);
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                int log = inputStream.available();
+                transferFile.setFileSize(log);
+                transferFile.setFileType(0);
+                transferFile.setBagSize(1024);
+                transferFile.setBagCont(getBagNum(log));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return transferFile;
+        }
+        return null;
+    }
+
+    private int getBagNum(int log) {
+        int num = 0;
+        if (log < 1024) {
+            num = 1;
+            return num;
+        } else {
+            int blog = log % 1024;
+            if (blog == 0) {
+                return log / 1024;
+            } else {
+                int lo = log - blog;
+                return (lo / 1024) + 1;
+            }
+        }
+    }
 }

@@ -4,20 +4,22 @@ package method;
  * Created by ejiang on 2017-07-14.
  */
 public class TransferMessage {
+
+
     public int getClientType() {
-            return clientType;
+        return clientType;
     }
 
     public void setClientType(int clientType) {
         this.clientType = clientType;
     }
 
-    public MessageTypes getMessageTypes() {
-        return mMessageTypes;
+    public MessageTypes getMessageType() {
+        return messageType;
     }
 
-    public void setMessageTypes(MessageTypes messageTypes) {
-        mMessageTypes = messageTypes;
+    public void setMessageType(MessageTypes messageType) {
+        this.messageType = messageType;
     }
 
     public String getMessageContent() {
@@ -29,7 +31,7 @@ public class TransferMessage {
     }
 
     private int clientType;
-    private MessageTypes mMessageTypes;
+    private MessageTypes messageType;
     private String messageContent;
 
     /// <summary>
