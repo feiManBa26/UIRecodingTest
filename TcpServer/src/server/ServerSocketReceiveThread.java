@@ -1,7 +1,10 @@
 package server;
 
+import com.google.gson.Gson;
+
 import java.awt.Desktop;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,18 +12,20 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import method.TransferMessage;
 import method.User;
 import utils.IOUtils;
 import utils.OpenImageUtils;
 
 /**
  * Created by ejiang on 2017-06-20.
+ * 服务端读取连接客户端发送信息线程
  */
-public class ServerSocketThread extends Thread {
+public class ServerSocketReceiveThread extends Thread {
     private List<User> mList;
     private User mUser;
 
-    public ServerSocketThread(List<User> list, User user) {
+    public ServerSocketReceiveThread(List<User> list, User user) {
         mList = list;
         mUser = user;
     }
@@ -103,20 +108,21 @@ public class ServerSocketThread extends Thread {
                         break;
                 }
             }
+
+
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("与客户端连接已经断开");
         } finally {
             //关闭资源
             try {
-                mUser.getDataOutputStream().close();
+                mUser.getDataInputStream().close();
                 mUser.getSocket().close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
     private void showImage(File file) {
         new OpenImageUtils(file.getAbsolutePath());
     }
@@ -135,6 +141,4 @@ public class ServerSocketThread extends Thread {
             e.printStackTrace();
         }
     }
-
-
 }

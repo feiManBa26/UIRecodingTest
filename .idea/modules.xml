@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/IdeaProject.iml" filepath="$PROJECT_DIR$/IdeaProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SocktUtils.iml" filepath="$PROJECT_DIR$/SocktUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/TcpClient/TcpClient.iml" filepath="$PROJECT_DIR$/TcpClient/TcpClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/TcpServer/TcpServer.iml" filepath="$PROJECT_DIR$/TcpServer/TcpServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TcpUtils/TcpUtils.iml" filepath="$PROJECT_DIR$/TcpUtils/TcpUtils.iml" />
     </modules>
   </component>
 </project>

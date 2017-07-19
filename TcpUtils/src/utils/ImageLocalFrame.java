@@ -6,8 +6,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import javafx.scene.media.MediaView;
-
 /**
  * Created by ejiang on 2017-07-13.
  */

@@ -7,7 +7,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="com.google.code.gson:gson:2.21" level="project" />
-    <orderEntry type="module" module-name="TcpUtils" />
   </component>
 </module>

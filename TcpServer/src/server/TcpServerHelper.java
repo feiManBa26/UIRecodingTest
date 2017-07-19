@@ -7,13 +7,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import method.ClientUser;
 import method.User;
 
 /**
  * Created by ejiang on 2017-06-16.
  */
 public class TcpServerHelper {
+
+    private User mClientUser;
+
     public TcpServerHelper() throws IOException {
         initServerSocket();
     }
@@ -25,15 +27,20 @@ public class TcpServerHelper {
         List<User> clientUsers = new ArrayList<>();
         while (true) {
             Socket socket = serverSocket.accept();
-            User clientUser = new User("User" + Math.round(Math.random() * 1000), socket);
-            System.out.println(clientUser.getUserName() + "正在登录~");
-            clientUsers.add(clientUser);
-            ServerSocketThread serverThread = new ServerSocketThread(clientUsers, clientUser);
-            serverThread.start();
+            mClientUser = new User("User" + Math.round(Math.random() * 1000), socket);
+            System.out.println(mClientUser.getUserName() + "正在登录~");
+            clientUsers.add(mClientUser);
             InetAddress address = socket.getInetAddress();
             System.out.println("当前客户端的IP：" + address.getHostAddress());
             System.out.println("当前本地的IP：" + socket.getLocalSocketAddress());
             System.out.println("当前本地的IP：" + socket.getLocalAddress());
+
+            //接收信息线程
+            ServerSocketReceiveThread serverThread = new ServerSocketReceiveThread(clientUsers, mClientUser);
+            serverThread.start();
+            //发送信息线程
+            ServerSocketSendThread serverSocketSendThread = new ServerSocketSendThread(clientUsers, mClientUser);
+            serverSocketSendThread.start();
         }
     }
 }

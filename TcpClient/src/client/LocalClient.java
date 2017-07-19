@@ -21,7 +21,5 @@ public interface LocalClient {
     void sendByteList(String filePath, SendCallback callback);
 
     void sendFileByteList(String filePath, SendCallback callback);
-
-
     void disconnect() throws IOException;
 }

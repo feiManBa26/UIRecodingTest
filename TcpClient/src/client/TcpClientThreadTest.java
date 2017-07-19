@@ -118,34 +118,34 @@ public class TcpClientThreadTest implements LocalClient {
 
     @Override
     public void sendByteList(String filePath, SendCallback callback) {
-        if (filePath == null && filePath.isEmpty()) return;
-        synchronized (TcpClientThreadTest.class) {
-            if (isConnection()) {
-                File file = new File(filePath);
-                if (file.exists()) {
-                    try {
-                        InputStream inputStream = new FileInputStream(file);
-                        if (inputStream == null) return;
-                        int available = inputStream.available();
-                        int length = 0;
-                        byte[] bytes = new byte[1024];
-                        long progress = 0;
-                        while ((length = inputStream.read(bytes, 0, bytes.length)) != -1) {
-                            byte[] intToBytes = IOUtils.intToBytes(length);
-                            mDataOutputStream.write(intToBytes);
-                            mDataOutputStream.flush();
-                            mDataOutputStream.write(bytes, 0, length);
-                            mDataOutputStream.flush();
-                            progress += length;
-                            System.out.println("| " + (100 * progress / available) + "% |");
-                        }
-                        inputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+//        if (filePath == null && filePath.isEmpty()) return;
+//        synchronized (TcpClientThreadTest.class) {
+//            if (isConnection()) {
+//                File file = new File(filePath);
+//                if (file.exists()) {
+//                    try {
+//                        InputStream inputStream = new FileInputStream(file);
+//                        if (inputStream == null) return;
+//                        int available = inputStream.available();
+//                        int length = 0;
+//                        byte[] bytes = new byte[1024];
+//                        long progress = 0;
+//                        while ((length = inputStream.read(bytes, 0, bytes.length)) != -1) {
+//                            byte[] intToBytes = IOUtils.intToBytes(length);
+//                            mDataOutputStream.write(intToBytes);
+//                            mDataOutputStream.flush();
+//                            mDataOutputStream.write(bytes, 0, length);
+//                            mDataOutputStream.flush();
+//                            progress += length;
+//                            System.out.println("| " + (100 * progress / available) + "% |");
+//                        }
+//                        inputStream.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Override
